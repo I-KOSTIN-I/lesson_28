@@ -1,0 +1,32 @@
+Запуск проекта по шагам:
+
+1. Запускаем контейнер БД PostgreSQL: docker run --rm --publish 127.0.0.1:5432:5432 --env POSTGRES_PASSWORD=postgres --name postgres --detach postgres:14.4-alpine
+2. Запускаем django проект
+3. Делаем миграции: python manage.py makemigrations
+4. Отаправляем миграции в базу данных: python manage.py migrate
+5. Создаем пользователя: POST на http://127.0.0.1:8000/user/user/create/
+{
+	"username": "palexandrov",
+	"password": "password",
+	"first_name": "Павел",
+	"last_name": "Александров",
+	"role": "member",
+	"age": 18,
+    "location": ["Москва", "м. Авиастроительная"]
+}
+6. Создаем категорию: POST на http://127.0.0.1:8000/ads/cat/create/
+{
+	"name": "games"
+}
+7. Создаем объявление: http://127.0.0.1:8000/ads/ad/create/
+{
+	"name": "Толстовка",
+	"author_id": 1,
+	"author": "Павел",
+	"price": 500,
+	"description": "Продаю кофту на рост 115 см по всем вопросам пишите",
+	"is_published": true,
+	"category_id": 1
+}
+8. Проверяем через GET запросы, добавленные данные.
+9. Все работает! Мы молодцы! Идем спунькать)
