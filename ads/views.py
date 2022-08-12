@@ -127,9 +127,9 @@ class CategoryDeleteView(DeleteView):
         return JsonResponse({"status": "ok"}, status=200)
 
 
-class AdView(ListView):
-    models = Ad
+class AdListView(ListView):
     queryset = Ad.objects.all()
+    serializer_class = AdSerializer
 
     def get(self, request, *args, **kwargs):
         super().get(request, *args, **kwargs)
