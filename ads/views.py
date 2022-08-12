@@ -8,9 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from rest_framework.generics import RetrieveAPIView, ListAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ads.models import Ad, Category, Selection
-from ads.permissions import SelectionUpdatePermission
+from ads.permissions import SelectionUpdatePermission, AdUpdatePermission
 from ads.serialaizers import AdSerializer, SelectionListSerializer, SelectionDetailSerializer, SelectionSerializer
 from users.models import User
 from lesson_28 import settings
@@ -36,18 +37,21 @@ class SelectionCreateView(CreateAPIView):
     queryset = Selection.objects.all()
     serializer_class = SelectionSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
 
 
 class SelectionUpdateView(UpdateAPIView):
     queryset = Selection.objects.all()
     serializer_class = SelectionSerializer
     permission_classes = [IsAuthenticated, SelectionUpdatePermission]
+    authentication_classes = [JWTAuthentication]
 
 
 class SelectionDeleteView(DestroyAPIView):
     queryset = Selection.objects.all()
     serializer_class = SelectionSerializer
     permission_classes = [IsAuthenticated, SelectionUpdatePermission]
+    authentication_classes = [JWTAuthentication]
 
 
 class CategoryView(ListView):
@@ -181,7 +185,8 @@ class AdListView(ListView):
 class AdDetailView(RetrieveAPIView):
     queryset = Ad.objects.all()
     serializer_class = AdSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, AdUpdatePermission]
+    authentication_classes = [JWTAuthentication]
 
 
 @method_decorator(csrf_exempt, name='dispatch')
